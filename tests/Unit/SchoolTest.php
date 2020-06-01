@@ -5,14 +5,13 @@ namespace Tests\Unit;
 
 
 use App\Repository\SchoolRepositoryInterface;
-use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 class SchoolTest extends TestCase
 {
 
     public function test_canGetAllSchools(SchoolRepositoryInterface $schoolRepository) {
-        $schools = $schoolRepository->all();
+        $schools = $schoolRepository->allByYear(2013);
         $this->assertIsArray($schools, 'Array of school records');
     }
 }

@@ -20,7 +20,7 @@ class LegacySchoolRepository extends BaseRepository implements LegacySchoolRepos
     /**
      * UserRepository constructor.
      *
-     * @param User $model
+     * @param LegacySchools $model
      */
     public function __construct(LegacySchools $model)
     {
