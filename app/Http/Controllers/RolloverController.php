@@ -55,11 +55,11 @@ class RolloverController extends Controller
 
 
 
-            $schools = $legacySchoolRepository->allByYear($year);
+            $schools = $this->getLegacySchools($year, $legacySchoolRepository);
             foreach ($schools as $school) {
                 $legacySchoolRepository->getSchoolData($school->schoolid);
-                $isMagnet = $legacySchoolRepository->isMagnetSchool();
-                echo '<br>magnet? -> '.$isMagnet;
+                $isMagnet = $this->isMagnetSchool($school->schoolid, $legacySchoolRepository);
+
             }
 
             $year++;
@@ -76,6 +76,17 @@ class RolloverController extends Controller
 //        $this->dd($this->currentSchoolTypes);
 //        //echo $this->orchestrateRollover($data)  ;
 //        // this would be the 'warning' display page with the 'set years' option
+    }
+
+
+    public function getLegacySchools($year, $legacySchoolRepository)
+    {
+        return $legacySchoolRepository->allByYear($year);
+    }
+
+    public function isMagnetSchool($schoolId, $legacySchoolRepository)
+    {
+        return $legacySchoolRepository->isMagnetSchool();
     }
 
     /**
@@ -117,7 +128,16 @@ class RolloverController extends Controller
         else {
             $this->postRolloverTableRowCount = $tables;
         }
+    }
 
+    public function getPreRolloverTableRowCount()
+    {
+        return $this->preRolloverTableRowCount;
+    }
+
+    public function getPostRolloverTableRowCount()
+    {
+        return $this->postRolloverTableRowCount;
     }
 
     public function getPreRolloverCount() {
@@ -171,12 +191,5 @@ class RolloverController extends Controller
 
 
 
-    }
-
-    private function dd($data)
-    {
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
     }
 }

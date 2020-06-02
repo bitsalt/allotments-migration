@@ -20,17 +20,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="44f3f766-2f8d-4c23-aeef-5f77defbfd27" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/RolloverController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/RolloverController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Providers/RepositoryServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/RepositoryServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repository/Eloquent/BaseRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repository/Eloquent/BaseRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repository/Eloquent/LegacySchoolRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repository/Eloquent/LegacySchoolRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repository/Eloquent/SchoolRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repository/Eloquent/SchoolRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repository/Eloquent/SchoolYearsRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repository/Eloquent/SchoolYearsRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/app.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/app.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Feature/SchoolYears.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Unit/LegacySchoolsTest.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Unit/SchoolYears.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phpunit.xml" beforeDir="false" afterPath="$PROJECT_DIR$/phpunit.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/Feature/ExampleTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Feature/ExampleTesty.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/Unit/ExampleTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Unit/ExampleTesty.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -224,7 +219,7 @@
       <workItem from="1591026276567" duration="1050000" />
       <workItem from="1591031910912" duration="1360000" />
       <workItem from="1591033542716" duration="978000" />
-      <workItem from="1591034842895" duration="8062000" />
+      <workItem from="1591034842895" duration="12044000" />
     </task>
     <servers />
   </component>
@@ -272,10 +267,10 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="496" y="211" key="#com.intellij.ide.util.TreeClassChooserDialog/0.23.1440.877@0.23.1440.877" timestamp="1591032253423" />
-    <state x="343" y="23" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1590590378555">
+    <state x="343" y="23" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1591066592266">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="343" y="23" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.23.1440.877@0.23.1440.877" timestamp="1590590378555" />
+    <state x="343" y="23" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.23.1440.877@0.23.1440.877" timestamp="1591066592266" />
     <state x="496" y="166" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1591038861728">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
