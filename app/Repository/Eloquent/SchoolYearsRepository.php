@@ -4,8 +4,9 @@
 namespace App\Repository\Eloquent;
 
 
-use App\SchoolYears;
+use App\SchoolYear;
 use Illuminate\Support\Collection;
+use App\Repository\Eloquent;
 
 class SchoolYearsRepository extends BaseRepository implements \App\Repository\SchoolYearsRepositoryInterface
 {
@@ -13,7 +14,7 @@ class SchoolYearsRepository extends BaseRepository implements \App\Repository\Sc
      * SchoolYearRepository constructor.
      * @param SchoolYears $model
      */
-    public function __construct(SchoolYears $model)
+    public function __construct(SchoolYear $model)
     {
         parent::__construct($model);
     }
@@ -31,4 +32,17 @@ class SchoolYearsRepository extends BaseRepository implements \App\Repository\Sc
             ->where('admin_current_ind', '=', 1)
             ->get();
     }
+
+    public function addSchoolYear($year, $displayYears)
+    {
+        return $this->model->create([
+            'school_year' => $year,
+            'display' => $displayYears,
+            'current_ind' => 0,
+            'admin_current_ind' => 0,
+            'visible_to_schools' => 0
+        ]);
+    }
+
+
 }

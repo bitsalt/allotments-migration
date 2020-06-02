@@ -14,4 +14,7 @@ interface SchoolYearsRepositoryInterface
     public function getCurrentYear(int $year): Collection;
 
     public function getCurrentAdminYear(int $year): Collection;
+
+    public function addSchoolYear(int $year, string $displayYears);
+
 }
