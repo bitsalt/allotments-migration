@@ -20,18 +20,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="44f3f766-2f8d-4c23-aeef-5f77defbfd27" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/legacyallot.local.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/legacyallot.local.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/RolloverController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/RolloverController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Providers/RepositoryServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/RepositoryServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Repository/Eloquent/BaseRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repository/Eloquent/BaseRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Repository/Eloquent/LegacySchoolRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repository/Eloquent/LegacySchoolRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Repository/Eloquent/SchoolRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repository/Eloquent/SchoolRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Repository/Eloquent/SchoolYearsRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repository/Eloquent/SchoolYearsRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Repository/SchoolYearsRepositoryInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repository/SchoolYearsRepositoryInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/SchoolType.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/SchoolType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/SchoolYear.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/SchoolYear.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Feature/RolloverTest.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Unit/ExampleTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Unit/ExampleTest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Unit/SchoolTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/app.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/app.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/Feature/SchoolYears.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/Unit/LegacySchoolsTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/Unit/SchoolYears.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -225,7 +224,7 @@
       <workItem from="1591026276567" duration="1050000" />
       <workItem from="1591031910912" duration="1360000" />
       <workItem from="1591033542716" duration="978000" />
-      <workItem from="1591034842895" duration="7503000" />
+      <workItem from="1591034842895" duration="8062000" />
     </task>
     <servers />
   </component>

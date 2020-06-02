@@ -8,7 +8,7 @@ use App\SchoolYear;
 use Illuminate\Support\Collection;
 use App\Repository\Eloquent;
 
-class SchoolYearsRepository extends BaseRepository implements \App\Repository\SchoolYearsRepositoryInterface
+class SchoolYearsRepository extends BaseRepository
 {
     /**
      * SchoolYearRepository constructor.

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\LegacySchools;
-use App\Repository\LegacySchoolRepositoryInterface;
-use App\Repository\SchoolRepositoryInterface;
+use App\Repository\Eloquent\LegacySchoolRepository;
+use App\Repository\Eloquent\SchoolRepository;
 use App\SchoolType;
 use App\SchoolYear;
 use Illuminate\Http\Request;
@@ -33,8 +33,8 @@ class RolloverController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(
-        SchoolRepositoryInterface $schoolRepository,
-        LegacySchoolRepositoryInterface $legacySchoolRepository)
+        SchoolRepository $schoolRepository,
+        LegacySchoolRepository $legacySchoolRepository)
     {
         $data = [
             'okToSave' => 'yes',

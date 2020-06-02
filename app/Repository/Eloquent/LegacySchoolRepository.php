@@ -3,12 +3,11 @@
 namespace App\Repository\Eloquent;
 
 use App\LegacySchools;
-use App\Repository\LegacySchoolRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Support\Collection;
 
-class LegacySchoolRepository extends BaseRepository implements LegacySchoolRepositoryInterface
+class LegacySchoolRepository extends BaseRepository
 {
 
     /**

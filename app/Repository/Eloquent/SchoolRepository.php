@@ -3,11 +3,10 @@
 namespace App\Repository\Eloquent;
 
 use App\School;
-use App\Repository\SchoolRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
-class SchoolRepository extends BaseRepository implements SchoolRepositoryInterface
+class SchoolRepository extends BaseRepository
 {
 
     /**

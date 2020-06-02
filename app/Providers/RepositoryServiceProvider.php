@@ -21,22 +21,22 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(
-            EloquentRepositoryInterface::class,
-            BaseRepository::class
-        );
-        $this->app->bind(
-            SchoolRepositoryInterface::class,
-            SchoolRepository::class
-        );
-        $this->app->bind(
-            LegacySchoolRepositoryInterface::class,
-            LegacySchoolRepository::class
-        );
-        $this->app->bind(
-            SchoolYearsRepositoryInterface::class,
-            SchoolYearsRepository::class
-        );
+//        $this->app->bind(
+//            EloquentRepositoryInterface::class,
+//            BaseRepository::class
+//        );
+//        $this->app->bind(
+//            SchoolRepositoryInterface::class,
+//            SchoolRepository::class
+//        );
+//        $this->app->bind(
+//            LegacySchoolRepositoryInterface::class,
+//            LegacySchoolRepository::class
+//        );
+//        $this->app->bind(
+//            SchoolYearsRepositoryInterface::class,
+//            SchoolYearsRepository::class
+//        );
     }
 
     /**
