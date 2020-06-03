@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\DB;
  * @property boolean $visible_to_schools
  */
 
-/** TODO: add an auto-increment $id field to this table. */
 class SchoolYear extends Model
 {
     /**
@@ -33,7 +32,7 @@ class SchoolYear extends Model
     /**
      * @var array
      */
-    protected $fillable = ['display', 'current_ind', 'admin_current_ind', 'visible_to_schools'];
+    protected $fillable = ['school_year', 'display', 'current_ind', 'admin_current_ind', 'visible_to_schools'];
 
     /**
      * Differs from Laravel conventional naming standard.
@@ -42,10 +41,6 @@ class SchoolYear extends Model
      */
     protected $table = 'school_years';
 
-    /**
-     * @param $year
-     * @param $displayYears
-     * @return int
-     */
+    public $timestamps = false;
 
 }

@@ -3,6 +3,7 @@
 
 namespace App\Repository;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 /**
@@ -15,6 +16,9 @@ interface SchoolYearsRepositoryInterface
 
     public function getCurrentAdminYear(int $year): Collection;
 
-    public function addSchoolYear(int $year, string $displayYears);
+    public function getSchoolYearDataByYear(int $year): Model;
 
+    public function addSchoolYear(int $year, string $displayYears): Model;
+
+    public function getAllSchoolYears(): Collection;
 }

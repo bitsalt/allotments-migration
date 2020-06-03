@@ -35,15 +35,5 @@ class SchoolType extends Model
      */
     protected $table = 'school_type';
 
-//    public static function getCurrentSchoolTypes($year)
-//    {
-//        /* Types from the DB:
-//         * TR, YR, SY, Mod, Alt, EC
-//         */
-//        $types =  DB::table('school_type')
-//            ->where('school_year', '=', $year)
-//            ->get(['id', 'school_type', 'school_type_name', 'override1']);
-//
-//        return $types;
-//    }
+    public $timestamps = false;
 }

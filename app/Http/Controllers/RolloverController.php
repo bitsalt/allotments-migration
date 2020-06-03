@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\LegacySchools;
+use App\Repository\GradeLevelRepositoryInterface;
 use App\Repository\LegacySchoolRepositoryInterface;
 use App\Repository\SchoolRepositoryInterface;
+use App\Repository\SchoolTypeRepositoryInterface;
+use App\Repository\SchoolYearsRepositoryInterface;
 use App\SchoolType;
 use App\SchoolYear;
 use Illuminate\Http\Request;
@@ -34,8 +37,35 @@ class RolloverController extends Controller
      */
     public function index(
         SchoolRepositoryInterface $schoolRepository,
-        LegacySchoolRepositoryInterface $legacySchoolRepository)
+        LegacySchoolRepositoryInterface $legacySchoolRepository,
+        SchoolYearsRepositoryInterface $schoolYearsRepository,
+        SchoolTypeRepositoryInterface $schoolTypeRepository,
+        GradeLevelRepositoryInterface $gradeLevelRepository
+        )
     {
+
+        /** Rollovers for... **/
+        $newYear = 2006;
+        $copyYear = 2013;
+
+        // ...school year
+        $ret = $schoolYearsRepository->addSchoolYear($newYear, '2006-2007');
+        $newYear = $schoolYearsRepository->getSchoolYearDataByYear($newYear);
+
+        // ...school types
+        $stCollection = $schoolTypeRepository->getDataByYear($copyYear);
+        $types = $stCollection->toArray();
+        $ret = $schoolTypeRepository->rolloverYear($newYear, $types);
+
+        // ...grade levels
+        $glCollection = $gradeLevelRepository->getDataByYear($copyYear);
+        $gradeLevels = $glCollection->toArray();
+        $ret = $gradeLevelRepository->rolloverYear($newYear, $gradeLevels);
+
+        // ...categories
+
+
+
         $data = [
             'okToSave' => 'yes',
             'updateCurrentYear' => 1,

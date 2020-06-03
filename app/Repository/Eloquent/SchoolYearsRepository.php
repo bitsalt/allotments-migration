@@ -5,8 +5,11 @@ namespace App\Repository\Eloquent;
 
 
 use App\SchoolYear;
+use Carbon\Exceptions\InvalidTypeException;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use App\Repository\Eloquent;
+use PHPUnit\Framework\ExceptionWrapper;
 
 class SchoolYearsRepository extends BaseRepository implements \App\Repository\SchoolYearsRepositoryInterface
 {
@@ -14,27 +17,24 @@ class SchoolYearsRepository extends BaseRepository implements \App\Repository\Sc
      * SchoolYearRepository constructor.
      * @param SchoolYears $model
      */
-    public function __construct(SchoolYear $model)
-    {
+    public function __construct(SchoolYear $model) {
         parent::__construct($model);
     }
 
-    public function getCurrentYear(int $year): Collection
-    {
+    public function getCurrentYear(int $year): Collection {
         return $this->model
             ->where('current_ind', '=', 1)
             ->get();
     }
 
-    public function getCurrentAdminYear(int $year): Collection
-    {
+    public function getCurrentAdminYear(int $year): Collection {
         return $this->model
             ->where('admin_current_ind', '=', 1)
             ->get();
     }
 
-    public function addSchoolYear($year, $displayYears)
-    {
+    public function addSchoolYear($year, $displayYears): Model {
+
         return $this->model->create([
             'school_year' => $year,
             'display' => $displayYears,
@@ -45,4 +45,11 @@ class SchoolYearsRepository extends BaseRepository implements \App\Repository\Sc
     }
 
 
+    public function getSchoolYearDataByYear(int $year): Model {
+        return $this->model->find($year);
+    }
+
+    public function getAllSchoolYears(): Collection {
+        return $this->model->all();
+    }
 }

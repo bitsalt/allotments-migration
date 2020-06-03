@@ -11,4 +11,5 @@ use Illuminate\Support\Collection;
 interface LegacySchoolRepositoryInterface
 {
     public function allByYear(int $year): Collection;
+
 }

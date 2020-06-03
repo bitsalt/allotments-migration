@@ -4,7 +4,7 @@ namespace App\Repository\Eloquent;
 
 use App\Repository\EloquentRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 
 class BaseRepository implements EloquentRepositoryInterface
 {
@@ -33,6 +33,10 @@ class BaseRepository implements EloquentRepositoryInterface
         return $this->model->create($attributes);
     }
 
+    public function save(array $attributes): Model {
+        return $this->model->save($attributes);
+    }
+
     /**
      * @param $id
      * @return Model
@@ -51,5 +55,12 @@ class BaseRepository implements EloquentRepositoryInterface
     public function all(): Collection
     {
         return $this->model->all();
+    }
+
+    public function getDataByYear(int $year): Collection
+    {
+        return $this->model
+            ->where('school_year', $year)
+            ->get();
     }
 }

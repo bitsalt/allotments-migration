@@ -19,6 +19,12 @@ interface EloquentRepositoryInterface
     public function create(array $attributes): Model;
 
     /**
+     * @param array $attributes
+     * @return Model
+     */
+    public function save(array $attributes): Model;
+
+    /**
      * @param $id
      * @return Model
      */
