@@ -22,8 +22,8 @@ class CreateUsersTable extends Migration
             $table->string('salt', 20)->nullable();
             $table->string('role', 15);
             $table->string('email', 30)->unique()->nullable();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->timestamps();
+            $table->timestamp('date_created')->nullable();
+            $table->timestamp('date_modified')->nullable();
             $table->tinyInteger('passwd_reset');
         });
     }
