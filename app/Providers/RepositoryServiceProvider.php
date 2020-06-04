@@ -2,14 +2,18 @@
 
 namespace App\Providers;
 
+use App\Repository\CategoriesRepositoryInterface;
 use App\Repository\Eloquent\BaseRepository;
+use App\Repository\Eloquent\CategoriesRepository;
 use App\Repository\Eloquent\GradeLevelRepository;
+use App\Repository\Eloquent\LegacyResourcesRepository;
 use App\Repository\Eloquent\LegacySchoolRepository;
 use App\Repository\Eloquent\SchoolRepository;
 use App\Repository\Eloquent\SchoolTypeRepository;
 use App\Repository\Eloquent\SchoolYearsRepository;
 use App\Repository\EloquentRepositoryInterface;
 use App\Repository\GradeLevelRepositoryInterface;
+use App\Repository\LegacyResourcesRepositoryInterface;
 use App\Repository\LegacySchoolRepositoryInterface;
 use App\Repository\SchoolRepositoryInterface;
 use App\Repository\SchoolTypeRepositoryInterface;
@@ -48,6 +52,14 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             GradeLevelRepositoryInterface::class,
             GradeLevelRepository::class
+        );
+        $this->app->bind(
+            CategoriesRepositoryInterface::class,
+            CategoriesRepository::class
+        );
+        $this->app->bind(
+            LegacyResourcesRepositoryInterface::class,
+            LegacyResourcesRepository::class
         );
     }
 

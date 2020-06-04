@@ -1,0 +1,11 @@
+#!/usr/local/bin/bash
+
+DB_DATABASE=allotment
+#DB_USERNAME=root
+#DB_PASSWORD="#!M31chiz3"
+DB_USERNAME=allotuser
+DB_PASSWORD="x5rtg4ybX!@"
+
+mysql -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE < allotClean.sql
+#SOUT="mysql -u "$DB_USERNAME" -p="$DB_PASSWORD" "$DB_DATABASE" < allotClean.sql"
+#echo $SOUT

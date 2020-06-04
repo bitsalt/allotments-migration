@@ -4,12 +4,13 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 
-class CategoriesTest extends TestCase
+final class CategoriesTest extends TestCase
 {
     protected $categoriesRepository;
 
     public function setUp(): void {
         parent::setUp();
+        $this->withoutExceptionHandling();
         $this->categoriesRepository = $this->app->make('App\Repository\CategoriesRepositoryInterface');
     }
 

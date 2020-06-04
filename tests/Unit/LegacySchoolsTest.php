@@ -8,6 +8,7 @@ use App\Repository\Eloquent\SchoolRepository;
 
 final class LegacySchoolsTest extends TestCase
 {
+    private $schoolRepository;
 
     public function setUp(): void {
         parent::setUp();

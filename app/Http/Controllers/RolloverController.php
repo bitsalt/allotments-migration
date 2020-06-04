@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\LegacySchools;
 use App\Repository\GradeLevelRepositoryInterface;
+use App\Repository\LegacyResourcesRepositoryInterface;
 use App\Repository\LegacySchoolRepositoryInterface;
 use App\Repository\SchoolRepositoryInterface;
 use App\Repository\SchoolTypeRepositoryInterface;
@@ -40,72 +41,79 @@ class RolloverController extends Controller
         LegacySchoolRepositoryInterface $legacySchoolRepository,
         SchoolYearsRepositoryInterface $schoolYearsRepository,
         SchoolTypeRepositoryInterface $schoolTypeRepository,
-        GradeLevelRepositoryInterface $gradeLevelRepository
+        GradeLevelRepositoryInterface $gradeLevelRepository,
+        LegacyResourcesRepositoryInterface $legacyResourcesRepository
         )
     {
+
 
         /** Rollovers for... **/
         $newYear = 2006;
         $copyYear = 2013;
 
+            /** Begin test bed **/
+//        $resources = $legacyResourcesRepository->getCategories($newYear);
+//        dd($resources);
+
+            /** End test bed **/
+
         // ...school year
         $ret = $schoolYearsRepository->addSchoolYear($newYear, '2006-2007');
-        $newYear = $schoolYearsRepository->getSchoolYearDataByYear($newYear);
+        $mod = $schoolYearsRepository->getSchoolYearDataByYear($newYear);
+        $newSchoolYear = $mod->toArray();
 
         // ...school types
         $stCollection = $schoolTypeRepository->getDataByYear($copyYear);
         $types = $stCollection->toArray();
-        $ret = $schoolTypeRepository->rolloverYear($newYear, $types);
+        $typesColl = $schoolTypeRepository->rolloverYear($newYear, $types);
+        $schoolTypes = $typesColl->toArray();
 
         // ...grade levels
         $glCollection = $gradeLevelRepository->getDataByYear($copyYear);
         $gradeLevels = $glCollection->toArray();
-        $ret = $gradeLevelRepository->rolloverYear($newYear, $gradeLevels);
-
+        $gradeLevelsColl = $gradeLevelRepository->rolloverYear($newYear, $gradeLevels);
+        $rolloverGradeLevels = $gradeLevelsColl->toArray();
         // ...categories
+        $categories = $legacyResourcesRepository->getCategories($newYear);
 
 
 
-        $data = [
-            'okToSave' => 'yes',
-            'updateCurrentYear' => 1,
-            'updateCurrentAdminYear' => 0,
-            'school_year' => 2006,
-            'display1' => 2006,
-            'display2' => 2007,
-            'adminCurrent' => 0,
-            'display' => '2006-2007',
-        ];
-
-//        $schools = $schoolRepository->allByYear(2013);
-//        $schools = $schoolRepository->find(300);
-
-        $year = 2006;
-        while ($year < 2013) {
-
-
-
-            $schools = $legacySchoolRepository->allByYear($year);
-            foreach ($schools as $school) {
-                $legacySchoolRepository->getSchoolData($school->schoolid);
-                $isMagnet = $legacySchoolRepository->isMagnetSchool();
-                echo '<br>magnet? -> '.$isMagnet;
-            }
-
-            $year++;
-        }
-
-       //$this->dd($schools);
-
-
-//        // store some vars needed throughout the process
-//        $this->currentSchoolYear = SchoolYear::getCurrentSchoolYear();
-//        $this->newSchoolYear = $data['school_year'];
+//        $data = [
+//            'okToSave' => 'yes',
+//            'updateCurrentYear' => 1,
+//            'updateCurrentAdminYear' => 0,
+//            'school_year' => 2006,
+//            'display1' => 2006,
+//            'display2' => 2007,
+//            'adminCurrent' => 0,
+//            'display' => '2006-2007',
+//        ];
 //
-//        $this->currentSchoolTypes = SchoolType::getCurrentSchoolTypes($this->currentSchoolYear);
-//        $this->dd($this->currentSchoolTypes);
-//        //echo $this->orchestrateRollover($data)  ;
-//        // this would be the 'warning' display page with the 'set years' option
+//        $year = 2006;
+//        while ($year < 2013) {
+//            $schools = $legacySchoolRepository->allByYear($year);
+//            foreach ($schools as $school) {
+//                $legacySchoolRepository->getSchoolData($school->schoolid);
+//                $isMagnet = $legacySchoolRepository->isMagnetSchool();
+//                echo '<br>magnet? -> '.$isMagnet;
+//            }
+//
+//            $year++;
+//        }
+
+
+        return view('rollover.index')
+//            ->with('newSchoolYear', $newSchoolYear);
+//            ->with('schoolTypes', $schoolTypes)
+//            ->with('gradeLevels', $rolloverGradeLevels);
+
+            ->with([
+                'newSchoolYear' => $newSchoolYear,
+                'schoolTypes' => $schoolTypes,
+                'gradeLevels' => $rolloverGradeLevels,
+                'categories' => $categories,
+            ]);
+
     }
 
     /**
