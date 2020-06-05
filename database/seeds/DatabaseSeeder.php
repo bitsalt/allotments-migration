@@ -32,5 +32,10 @@ class DatabaseSeeder extends Seeder
         $this->call(SpecificReportsTableSeeder::class);
         $this->call(UsersTableSeeder::class);
         $this->call(UserRoleTableSeeder::class);
+        $this->call(LegacyAllotmentsTableSeeder::class);
+        $this->call(LegacyMembership2006TableSeeder::class);
+        $this->call(LegacyParamsTableSeeder::class);
+        $this->call(LegacyResourcesTableSeeder::class);
+        $this->call(LegacySchoolsTableSeeder::class);
     }
 }
