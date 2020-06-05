@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\LegacySchools;
+use App\Repository\CategoriesRepositoryInterface;
 use App\Repository\GradeLevelRepositoryInterface;
 use App\Repository\LegacyResourcesRepositoryInterface;
 use App\Repository\LegacySchoolRepositoryInterface;
@@ -42,7 +43,8 @@ class RolloverController extends Controller
         SchoolYearsRepositoryInterface $schoolYearsRepository,
         SchoolTypeRepositoryInterface $schoolTypeRepository,
         GradeLevelRepositoryInterface $gradeLevelRepository,
-        LegacyResourcesRepositoryInterface $legacyResourcesRepository
+        LegacyResourcesRepositoryInterface $legacyResourcesRepository,
+        CategoriesRepositoryInterface $categoriesRepository
         )
     {
 
@@ -73,8 +75,10 @@ class RolloverController extends Controller
         $gradeLevels = $glCollection->toArray();
         $gradeLevelsColl = $gradeLevelRepository->rolloverYear($newYear, $gradeLevels);
         $rolloverGradeLevels = $gradeLevelsColl->toArray();
+
         // ...categories
         $categories = $legacyResourcesRepository->getCategories($newYear);
+        $categories = $categoriesRepository->rolloverLegacyData($newYear, $categories);
 
 
 
