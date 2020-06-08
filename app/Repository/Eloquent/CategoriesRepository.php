@@ -6,6 +6,7 @@ namespace App\Repository\Eloquent;
 
 use Illuminate\Database\Eloquent\Collection;
 use App\Categories;
+use Illuminate\Database\Eloquent\Model;
 use function PHPUnit\Framework\isEmpty;
 
 class CategoriesRepository extends BaseRepository implements \App\Repository\CategoriesRepositoryInterface
@@ -32,11 +33,15 @@ class CategoriesRepository extends BaseRepository implements \App\Repository\Cat
         return $this->getDataByYear($newYear);
     }
 
-    public function rolloverLegacyData(int $newYear, array $categoryData)
+    /**
+     * @param int $newYear
+     * @param array $categoryData
+     */
+    public function rolloverLegacyData(int $newYear, array $categoryData):void
     {
         $displayOrder = 1;
         foreach ($categoryData as $categoryName) {
-            if ($match = $this->legacyCategoryNameHasRecentMatch($categoryName)) {
+            if ($match = $this->getCategoryByName($categoryName)) {
                 $match['display_order'] = $displayOrder;
                 $this->rolloverYear($newYear, [$match]);
             } else {
@@ -53,12 +58,20 @@ class CategoriesRepository extends BaseRepository implements \App\Repository\Cat
         }
     }
 
-    public function legacyCategoryNameHasRecentMatch($testName): array
+    public function getCategoryByName($testName, $year=''): array
     {
-        $matches = $this->model
-            ->where('category_name', '=', $testName)
-            ->orderBy('school_year', 'asc')
-            ->get();
+        if(!empty($year)) {
+            $matches = $this->model
+                ->where('category_name', '=', $testName)
+                ->where('school_year', '=', $year)
+                ->orderBy('school_year', 'asc')
+                ->get();
+        } else {
+            $matches = $this->model
+                ->where('category_name', '=', $testName)
+                ->orderBy('school_year', 'asc')
+                ->get();
+        }
 
         if ($matches->isEmpty()) {
             return [];

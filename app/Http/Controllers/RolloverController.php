@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\LegacySchools;
 use App\Repository\CategoriesRepositoryInterface;
 use App\Repository\GradeLevelRepositoryInterface;
+use App\Repository\LegacyAllotmentRepositoryInterface;
 use App\Repository\LegacyResourcesRepositoryInterface;
 use App\Repository\LegacySchoolRepositoryInterface;
 use App\Repository\SchoolRepositoryInterface;
@@ -44,7 +45,8 @@ class RolloverController extends Controller
         SchoolTypeRepositoryInterface $schoolTypeRepository,
         GradeLevelRepositoryInterface $gradeLevelRepository,
         LegacyResourcesRepositoryInterface $legacyResourcesRepository,
-        CategoriesRepositoryInterface $categoriesRepository
+        CategoriesRepositoryInterface $categoriesRepository,
+        LegacyAllotmentRepositoryInterface $legacyAllotmentRepository
         )
     {
 
@@ -76,10 +78,16 @@ class RolloverController extends Controller
         $gradeLevelsColl = $gradeLevelRepository->rolloverYear($newYear, $gradeLevels);
         $rolloverGradeLevels = $gradeLevelsColl->toArray();
 
-        // ...categories
-        $categories = $legacyResourcesRepository->getCategories($newYear);
-        $categories = $categoriesRepository->rolloverLegacyData($newYear, $categories);
+        // ...categories - uses the Resources repository, but must be processed first
+        $categoriesCollection = $legacyResourcesRepository->getCategories($newYear);
+        $categories = $categoriesRepository->rolloverLegacyData($newYear, $categoriesCollection);
 
+        // ...resources
+         $resourcesCollection = $legacyResourcesRepository->getResources($newYear);
+
+        // ...allotment types
+        $legacyAllotmentsCollection = $legacyAllotmentRepository->getAllotments();
+        $legacyAllotments = $legacyAllotmentsCollection->toArray();
 
 
 //        $data = [
@@ -116,6 +124,7 @@ class RolloverController extends Controller
                 'schoolTypes' => $schoolTypes,
                 'gradeLevels' => $rolloverGradeLevels,
                 'categories' => $categories,
+                'legacyAllotments' => $legacyAllotments,
             ]);
 
     }

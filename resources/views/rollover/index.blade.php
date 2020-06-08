@@ -27,5 +27,9 @@
             @foreach($categories as $category)
                 {{$category}}<br>
             @endforeach
+            <h3>Legacy Allotments</h3>
+            @foreach($legacyAllotments as $legacyAllotment)
+                {{$legacyAllotment}}<br>
+            @endforeach
         </div>
 @endsection
