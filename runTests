@@ -6,11 +6,16 @@ DB_DATABASE=allotment
 DB_USERNAME=allotuser
 DB_PASSWORD="x5rtg4ybX!@"
 
+# Load fresh data
 mysql -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE < allotClean.sql
 #SOUT="mysql -u "$DB_USERNAME" -p="$DB_PASSWORD" "$DB_DATABASE" < allotClean.sql"
 #echo $SOUT
 
+# Clean up error reporting
+cat /dev/null > rolloverExceptions
+
+# Run the test suite
 ./artisan test 
 
-# Verbose output...
+# ...with verbose output
 #./artisan test -v

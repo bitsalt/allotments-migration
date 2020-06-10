@@ -11,5 +11,7 @@ use Illuminate\Support\Collection;
 interface LegacySchoolRepositoryInterface
 {
     public function getAllDataByYear(int $year): array;
-
+    public function getCountByYear($year): int;
+    public function isMagnetSchool(): bool;
+    public function getSchoolDataById($id): array;
 }

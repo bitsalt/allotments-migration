@@ -36,13 +36,13 @@ class LegacySchoolRepository implements LegacySchoolRepositoryInterface
     {
         return $this->model::where('start_yr', '<=', $year)
             ->where('end_yr', '>=', $year)
-            ->firstOrFail()
+            ->get()
             ->toArray();
     }
 
-    public function countByYear($year): Collection
+    public function getCountByYear($year): int
     {
-        return count($this->allByYear($year));
+        return count($this->getAllDataByYear($year));
     }
 
     public function isMagnetSchool(): bool
@@ -57,11 +57,12 @@ class LegacySchoolRepository implements LegacySchoolRepositoryInterface
         return false;
     }
 
-    public function getSchoolData($id): void
+    public function getSchoolDataById($id): array
     {
-        $this->schoolData = $this->model::where([
-            'id' => $id
-        ]);
+        $this->schoolData = $this->model::where('id', '=', $id)
+            ->get()
+            ->toArray();
 
+        return $this->schoolData;
     }
 }

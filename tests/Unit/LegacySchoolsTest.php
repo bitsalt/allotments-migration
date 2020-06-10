@@ -8,29 +8,31 @@ use App\Repository\Eloquent\SchoolRepository;
 
 final class LegacySchoolsTest extends TestCase
 {
-    private $schoolRepository;
+    private $legacySchoolRepository;
 
-    public function setUp(): void {
+    public function setUp(): void
+    {
         parent::setUp();
-        $this->schoolRepository = $this->app->make('App\Repository\LegacySchoolRepositoryInterface');
+        $this->legacySchoolRepository = $this->app->make('App\Repository\LegacySchoolRepositoryInterface');
     }
 
-    public function testDatabaseHasLegacySchools() {
+    public function testDatabaseHasLegacySchools()
+    {
         $this->assertDatabaseHas('legacy_schools', [
             'schoolname' => 'Adams Elementary'
         ]);
     }
 
-    public function testCanListLegacySchools() {
-        $collection = \App\LegacySchools::all();
-        $schools = $collection->toArray();
-        $this->assertIsArray($schools);
+    public function testCanGetAllSchoolsByYear()
+    {
+        $data = $this->legacySchoolRepository->getAllDataByYear(2013);
+        $this->assertIsArray($data, 'Array of school records');
     }
 
-    public function testCanGetAllSchoolsByYear() {
-        $collection = $this->schoolRepository->allByYear(2013);
-        $schools = $collection->toArray();
-        $this->assertIsArray($schools, 'Array of school records');
+    public function testCanGetLegacySchoolCount()
+    {
+        $schools = $this->legacySchoolRepository->getCountByYear(2006);
+        $this->assertGreaterThan(100, $schools);
     }
 
 }

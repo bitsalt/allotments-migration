@@ -11,6 +11,7 @@ use App\Repository\Eloquent\LegacyAllotmentRepository;
 use App\Repository\Eloquent\LegacyResourcesRepository;
 use App\Repository\Eloquent\LegacySchoolRepository;
 use App\Repository\Eloquent\SchoolRepository;
+use App\Repository\Eloquent\SchoolsRepository;
 use App\Repository\Eloquent\SchoolTypeRepository;
 use App\Repository\Eloquent\SchoolYearsRepository;
 use App\Repository\EloquentRepositoryInterface;
@@ -19,6 +20,7 @@ use App\Repository\LegacyAllotmentRepositoryInterface;
 use App\Repository\LegacyResourcesRepositoryInterface;
 use App\Repository\LegacySchoolRepositoryInterface;
 use App\Repository\SchoolRepositoryInterface;
+use App\Repository\SchoolsRepositoryInterface;
 use App\Repository\SchoolTypeRepositoryInterface;
 use App\Repository\SchoolYearsRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -67,6 +69,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             AllotmentTypesRepositoryInterface::class,
             AllotmentTypesRepository::class
+        );
+        $this->app->bind(
+            SchoolsRepositoryInterface::class,
+            SchoolsRepository::class
         );
 
 //        // Base repository binding

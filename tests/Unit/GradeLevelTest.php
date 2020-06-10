@@ -15,19 +15,18 @@ final class GradeLevelTest extends TestCase {
 
     public function testCanGetDataByYear() {
         $data = $this->gradeLevelRepository->getDataByYear(2013);
-        $dataArr = $data->toArray();
-        $this->assertIsArray($dataArr);
+        $this->assertIsArray($data);
     }
 
     public function testCanDoRolloverOperation() {
         $newYear = 2006;
         $copyYear = 2013;
         $data = $this->gradeLevelRepository->getDataByYear($copyYear);
-        $dataArr = $data->toArray();
-        $this->gradeLevelRepository->rolloverYear($newYear, $dataArr);
+        $this->gradeLevelRepository->rolloverYear($newYear, $data);
 
         $newData = $this->gradeLevelRepository->getDataByYear($newYear);
-        $dataArr = $newData->toArray();
-        $this->assertIsArray($dataArr);
+        $this->assertNotNull($newData[0]['grade_level_name']);
     }
+
+
 }

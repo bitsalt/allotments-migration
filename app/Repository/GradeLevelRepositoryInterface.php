@@ -12,6 +12,6 @@ use Illuminate\Database\Eloquent\Collection;
  */
 interface GradeLevelRepositoryInterface
 {
-    public function rolloverYear(int $newYear, array $gradeLevelData): Collection;
-
+    public function rolloverYear(int $newYear, array $gradeLevelData): array;
+    public function getDataByYear(int $year): array;
 }

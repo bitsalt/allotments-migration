@@ -15,22 +15,22 @@ class GradeLevelRepository implements \App\Repository\GradeLevelRepositoryInterf
         $this->model = $model;
     }
 
-    public function rolloverYear(int $newYear, array $gradeLevelData): Collection
+    public function rolloverYear(int $newYear, array $gradeLevelData): array
     {
         foreach ($gradeLevelData as $schoolType) {
             $type = $this->model::where('id', '=', $schoolType['id'])
-                ->get();
-            $type = $type->toArray();
+                ->first()
+                ->toArray();
             $type['school_year'] = $newYear;
             $this->model::create($type);
         }
         return $this->getDataByYear($newYear);
     }
 
-    public function getDataByYear(int $year): Collection
+    public function getDataByYear(int $year): array
     {
-        return $this->model::where([
-            'school_year' => $year
-        ])->get();
+        return $this->model::where('school_year', '=', $year)
+            ->get()
+            ->toArray();
     }
 }
