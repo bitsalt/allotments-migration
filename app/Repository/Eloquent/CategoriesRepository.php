@@ -9,11 +9,13 @@ use App\Categories;
 use Illuminate\Database\Eloquent\Model;
 use function PHPUnit\Framework\isEmpty;
 
-class CategoriesRepository extends BaseRepository implements \App\Repository\CategoriesRepositoryInterface
+class CategoriesRepository implements \App\Repository\CategoriesRepositoryInterface
 {
 
+    private $model;
+
     public function __construct(Categories $model) {
-        parent::__construct($model);
+        $this->model = $model;
     }
 
     /**
@@ -22,28 +24,28 @@ class CategoriesRepository extends BaseRepository implements \App\Repository\Cat
      * @param array $categoryData
      * @return Collection
      */
-    public function rolloverYear(int $newYear, array $categoryData): Collection
+    public function rolloverYear(int $newYear, array $categoryData): void
     {
-        foreach ($categoryData as $data) {
-            $type = $this->model->find($data['category_id']);
-            $newType = $type->replicate();
-            $newType->save();
-            $newType->update(['school_year' => $newYear]);
-        }
-        return $this->getDataByYear($newYear);
+        $categoryData['school_year'] = $newYear;
+        unset($categoryData['category_id']);
+        $this->model::create($categoryData);
     }
 
     /**
      * @param int $newYear
      * @param array $categoryData
      */
-    public function rolloverLegacyData(int $newYear, array $categoryData):void
+    public function rolloverLegacyData(int $newYear, int $copyYear, array $categoryData):void
     {
         $displayOrder = 1;
         foreach ($categoryData as $categoryName) {
-            if ($match = $this->getCategoryByName($categoryName)) {
+            $match = $this->model::where('category_name', '=', $categoryName)
+                ->where('school_year', '=', $copyYear)
+                ->first();
+            if ($match) {
+                $match = $match->toArray();
                 $match['display_order'] = $displayOrder;
-                $this->rolloverYear($newYear, [$match]);
+                $this->rolloverYear($newYear, $match);
             } else {
                 $data = [
                     'category_name' => $categoryName,
@@ -52,33 +54,40 @@ class CategoriesRepository extends BaseRepository implements \App\Repository\Cat
                     'salary_nonsalary_ind' => NULL,
                     'display_order' => $displayOrder
                 ];
-                $this->model->create($data);
+                $this->model::create($data);
             }
             $displayOrder++;
         }
     }
 
+
     public function getCategoryByName($testName, $year=''): array
     {
         if(!empty($year)) {
-            $matches = $this->model
-                ->where('category_name', '=', $testName)
-                ->where('school_year', '=', $year)
-                ->orderBy('school_year', 'asc')
+            $matches = $this->model::where([
+                'category_name' => $testName,
+                'school_year' => $year
+            ])->orderBy('school_year', 'asc')
                 ->get();
         } else {
-            $matches = $this->model
-                ->where('category_name', '=', $testName)
-                ->orderBy('school_year', 'asc')
+            $matches = $this->model::where([
+                'category_name' => $testName,
+                ])->orderBy('school_year', 'asc')
                 ->get();
         }
 
-        if ($matches->isEmpty()) {
+        if (empty($matches)) {
             return [];
         }
 
         $match = $matches->toArray();
-        return $match[0];
+        return $match;
     }
 
+    public function getAllDataByYear(int $year): array
+    {
+        return $this->model::where('school_year', '=', $year)
+            ->get()
+            ->toArray();
+    }
 }

@@ -9,3 +9,8 @@ DB_PASSWORD="x5rtg4ybX!@"
 mysql -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE < allotClean.sql
 #SOUT="mysql -u "$DB_USERNAME" -p="$DB_PASSWORD" "$DB_DATABASE" < allotClean.sql"
 #echo $SOUT
+
+./artisan test 
+
+# Verbose output...
+#./artisan test -v

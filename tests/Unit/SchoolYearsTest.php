@@ -14,16 +14,14 @@ final class SchoolYearsTest extends TestCase {
     }
 
     public function testCanGetSchoolYearRecordByYear() {
-        $data = $this->schoolYearsRepository->getSchoolYearDataByYear(2013);
-        $arr = $data->toArray();
-        $this->assertArrayHasKey('display', $arr);
+        $data = $this->schoolYearsRepository->getAllDataByYear(2013);
+        $this->assertArrayHasKey('display', $data);
     }
 
     public function testCanAddSchoolYear() {
         $this->schoolYearsRepository->addSchoolYear(2006, '2006-2007');
-        $data = $this->schoolYearsRepository->getSchoolYearDataByYear(2006);
-        $arr = $data->toArray();
-        $this->assertEquals('2006-2007', $arr['display']);
+        $data = $this->schoolYearsRepository->getAllDataByYear(2006);
+        $this->assertEquals('2006-2007', $data['display']);
     }
 
 }

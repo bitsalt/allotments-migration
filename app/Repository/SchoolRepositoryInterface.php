@@ -6,5 +6,5 @@ use Illuminate\Support\Collection;
 
 interface SchoolRepositoryInterface
 {
-    public function allByYear(int $year): Collection;
+    public function getAllDataByYear(int $year): array;
 }

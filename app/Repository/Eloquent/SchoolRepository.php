@@ -7,8 +7,10 @@ use App\Repository\SchoolRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
-class SchoolRepository extends BaseRepository implements SchoolRepositoryInterface
+class SchoolRepository implements SchoolRepositoryInterface
 {
+
+    private $model;
 
     /**
      * UserRepository constructor.
@@ -17,16 +19,18 @@ class SchoolRepository extends BaseRepository implements SchoolRepositoryInterfa
      */
     public function __construct(School $model)
     {
-        parent::__construct($model);
+        $this->model = $model;
     }
 
 
     /**
-     * @return Collection
+     * @return array
      */
-    public function allByYear($year): Collection
+    public function getAllDataByYear($year): array
     {
-        return $this->model->where('school_year', '=', $year)->get();
+        return $this->model::where('school_year', '=', $year)
+            ->get()
+            ->toArray();
     }
 
 

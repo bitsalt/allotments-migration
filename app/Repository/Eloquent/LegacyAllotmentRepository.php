@@ -8,16 +8,18 @@ use Illuminate\Database\Eloquent\Collection;
 use App\LegacyAllotments;
 use Illuminate\Database\Eloquent\Model;
 
-class LegacyAllotmentRepository extends BaseRepository implements \App\Repository\LegacyAllotmentRepositoryInterface
+class LegacyAllotmentRepository implements \App\Repository\LegacyAllotmentRepositoryInterface
 {
+    private $model;
+
     public function __construct(LegacyAllotments $model)
     {
-        parent::__construct($model);
+        $this->model = $model;
     }
 
-    public function getAllotments(): Collection
+    public function getAllotments(): array
     {
-        return $this->model->all();
+        return $this->model::all()->toArray();
     }
 
     /**
@@ -25,10 +27,10 @@ class LegacyAllotmentRepository extends BaseRepository implements \App\Repositor
      * @param int $year
      * @return Collection
      */
-    public function getDataByYear(int $year): Collection
+    public function getDataByYear(int $year): array
     {
-        return $this->model
-            ->where('year', $year)
-            ->get();
+        return $this->model::where('year', '=', $year)
+            ->get()
+            ->toArray();
     }
 }

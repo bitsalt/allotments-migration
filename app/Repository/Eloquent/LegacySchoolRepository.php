@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Support\Collection;
 
-class LegacySchoolRepository extends BaseRepository implements LegacySchoolRepositoryInterface
+class LegacySchoolRepository implements LegacySchoolRepositoryInterface
 {
 
     /**
@@ -16,6 +16,7 @@ class LegacySchoolRepository extends BaseRepository implements LegacySchoolRepos
      */
     protected $schoolData;
 
+    private $model;
 
     /**
      * UserRepository constructor.
@@ -24,18 +25,19 @@ class LegacySchoolRepository extends BaseRepository implements LegacySchoolRepos
      */
     public function __construct(LegacySchools $model)
     {
-        parent::__construct($model);
+        $this->model = $model;
     }
 
 
     /**
      * @return Collection
      */
-    public function allByYear($year): Collection
+    public function getAllDataByYear($year): array
     {
-        return $this->model->where('start_yr', '<=', $year)
+        return $this->model::where('start_yr', '<=', $year)
             ->where('end_yr', '>=', $year)
-            ->get();
+            ->firstOrFail()
+            ->toArray();
     }
 
     public function countByYear($year): Collection
@@ -57,7 +59,9 @@ class LegacySchoolRepository extends BaseRepository implements LegacySchoolRepos
 
     public function getSchoolData($id): void
     {
-        $school = $this->find($id);
-        $this->schoolData = $school->attributesToArray();
+        $this->schoolData = $this->model::where([
+            'id' => $id
+        ]);
+
     }
 }

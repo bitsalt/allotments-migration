@@ -5,61 +5,56 @@ namespace App\Repository\Eloquent;
 
 
 use App\AllotmentTypes;
-use App\Repository\AllotmentTypesRepositoryInterface;
-use App\Repository\CategoriesRepositoryInterface;
+use App\Categories;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use App\LegacyResources;
-use Psr\Log\NullLogger;
 
-class LegacyResourcesRepository extends BaseRepository implements \App\Repository\LegacyResourcesRepositoryInterface
+class LegacyResourcesRepository implements \App\Repository\LegacyResourcesRepositoryInterface
 {
-    private $allotmentTypesRepository;
-    private $categoriesRepository;
+    private $model;
 
     public function __construct(LegacyResources $model) {
-        parent::__construct($model);
-        $this->allotmentTypesModel = app()->make(AllotmentTypesRepositoryInterface::class);
-        $this->categoriesRepository = app()->make(CategoriesRepositoryInterface::class);
+        $this->model = $model;
     }
 
     public function rolloverLegacyData(int $year): void
     {
-        $collection = $this->getResources($year);
-        $records = $collection->toArray();
+        $records = $this->getAllDataByYear($year);
         foreach ($records as $record) {
-            $this->allotmentTypesRepository->save($this->mapLegacyResourceToAllotmentType($record));
+            $newRecord = $this->mapLegacyResourceToAllotmentType($record, $year);
+            AllotmentTypes::create($newRecord);
         }
     }
 
     /**
      * Map data from legacy resource table to allotment_type table
-     *
      * @param $record
+     * @param $year
+     * @return array
      */
-    public function mapLegacyResourceToAllotmentType($record, $year)
+    public function mapLegacyResourceToAllotmentType($record, $year): array
     {
-        $map = [
+        $categoryId = Categories::select('category_id')
+            ->where('category_name', '=', $record['category_name'])
+            ->where('school_year', '=', $year)
+            ->first()
+            ->toArray();
+
+        return [
             'school_year' => $year,
             'allotment_prog_code' => $record['resourceid'],
-            'allotment_prog_desc' => $record['name'],
+            'allotment_prog_desc' => $record['category_name'],
+            'category_id' => $categoryId['category_id'],
             'data_link' => $record['data_link'],
             'is_carryover' => 0,
             'date_created' => date('Y-m-d H:i:s'),
             'date_modified' => null,
         ];
-
-        $categoryData = $this->categoriesRepository->getCategoryByName($record['category_name'], $year);
-        $map['category_id'] = $categoryData['category_id'];
-        $map['category_name'] = $categoryData['category_name'];
-
-        return $map;
     }
 
     public function getCategories(int $year): array
     {
-        $resourceCollection = $this->getResources($year);
-        $resources = $resourceCollection->toArray();
+        $resources = $this->getAllDataByYear($year);
         $categoryArray = [];
         foreach ($resources as $resource) {
             $categoryArray[] = $resource['category_name'];
@@ -68,12 +63,12 @@ class LegacyResourcesRepository extends BaseRepository implements \App\Repositor
         return array_unique($categoryArray);
     }
 
-    public function getResources($year): Collection
+    public function getAllDataByYear($year): array
     {
-        $resources = $this->model
-            ->where('start_yr', '<=', $year)
+        return LegacyResources::where('start_yr', '<=', $year)
             ->where('end_yr', '>', $year)
-            ->get();
-        return $resources;
+            ->get()
+            ->toArray();
     }
+
 }

@@ -9,10 +9,12 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use App\Repository\SchoolTypeRepositoryInterface;
 
-class SchoolTypeRepository extends BaseRepository implements SchoolTypeRepositoryInterface
+class SchoolTypeRepository implements SchoolTypeRepositoryInterface
 {
+    private $model;
+
     public function __construct(SchoolType $model) {
-        parent::__construct($model);
+        $this->model = $model;
     }
 
     /**
@@ -22,15 +24,20 @@ class SchoolTypeRepository extends BaseRepository implements SchoolTypeRepositor
     public function rolloverYear(int $newYear, array $schoolTypeData): Collection
     {
         foreach ($schoolTypeData as $schoolType) {
-            $type = $this->model->find($schoolType['id']);
-            $newType = $type->replicate();
+            $type = $this->model::where([
+                'id' => $schoolType['id']
+            ]);
+            $newType = $this->model->replicate();
             $newType->save();
             $newType->update(['school_year' => $newYear]);
-//            $schoolType['school_year'] = $newYear;
-//            unset($schoolType['id']);
-//            $this->model->save([$schoolType]);
         }
         return $this->getDataByYear($newYear);
     }
 
+    public function getDataByYear($year)
+    {
+        return $this->model::where([
+            'school_year' => $year
+        ])->get();
+    }
 }

@@ -80,7 +80,7 @@ class RolloverController extends Controller
 
         // ...categories - uses the Resources repository, but must be processed first
         $categoriesCollection = $legacyResourcesRepository->getCategories($newYear);
-        $categories = $categoriesRepository->rolloverLegacyData($newYear, $categoriesCollection);
+        $categories = $categoriesRepository->rolloverLegacyData($newYear, $copyYear, $categoriesCollection);
 
         // ...resources
          $resourcesCollection = $legacyResourcesRepository->getResources($newYear);

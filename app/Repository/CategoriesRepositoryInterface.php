@@ -13,7 +13,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 interface CategoriesRepositoryInterface {
 
-    public function rolloverYear(int $newYear, array $schoolTypeData): Collection;
+    public function rolloverYear(int $newYear, array $schoolTypeData): void;
 
-    public function getCategoryByName($name): array;
+    public function getCategoryByName($name, $year): array;
+
+    public function rolloverLegacyData(int $newYear, int $copyYear, array $categoryData): void;
+
+    public function getAllDataByYear(int $year): array;
+
 }

@@ -10,5 +10,9 @@ interface LegacyResourcesRepositoryInterface {
 
     public function getCategories(int $year): array;
 
-    public function getResources(int $year): Collection;
+    public function rolloverLegacyData(int $year): void;
+
+    public function mapLegacyResourceToAllotmentType($record, $year): array;
+
+    public function getAllDataByYear($year): array;
 }

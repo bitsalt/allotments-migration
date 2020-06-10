@@ -11,26 +11,29 @@ use Illuminate\Support\Collection;
 use App\Repository\Eloquent;
 use PHPUnit\Framework\ExceptionWrapper;
 
-class SchoolYearsRepository extends BaseRepository implements \App\Repository\SchoolYearsRepositoryInterface
+class SchoolYearsRepository implements \App\Repository\SchoolYearsRepositoryInterface
 {
+
+    private $model;
+
     /**
      * SchoolYearRepository constructor.
      * @param SchoolYears $model
      */
     public function __construct(SchoolYear $model) {
-        parent::__construct($model);
+        $this->model = $model;
     }
 
     public function getCurrentYear(int $year): Collection {
-        return $this->model
-            ->where('current_ind', '=', 1)
-            ->get();
+        return $this->model::where([
+            'current_ind' => 1
+        ])->get();
     }
 
     public function getCurrentAdminYear(int $year): Collection {
-        return $this->model
-            ->where('admin_current_ind', '=', 1)
-            ->get();
+        return $this->model::where([
+            'admin_current_ind' => 1
+        ])->get();
     }
 
     public function addSchoolYear($year, $displayYears): Model {
@@ -45,11 +48,15 @@ class SchoolYearsRepository extends BaseRepository implements \App\Repository\Sc
     }
 
 
-    public function getSchoolYearDataByYear(int $year): Model {
-        return $this->model->find($year);
-    }
-
     public function getAllSchoolYears(): Collection {
         return $this->model->all();
     }
+
+    public function getAllDataByYear(int $year): array
+    {
+        return $this->model::where([
+            'school_year' => $year
+        ])->firstOrFail()->toArray();
+    }
+
 }

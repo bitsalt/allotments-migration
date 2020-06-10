@@ -17,9 +17,15 @@ use Illuminate\Database\Eloquent\Model;
  */
 class AllotmentTypes extends Model
 {
+
+    public $timestamps = false;
+
     /**
      * @var array
      */
     protected $fillable = ['school_year', 'allotment_prog_code', 'allotment_prog_desc', 'category_id', 'data_link', 'is_carryover', 'date_created', 'date_modified'];
 
+    protected $attributes = [
+        'is_carryover' => 0,
+    ];
 }

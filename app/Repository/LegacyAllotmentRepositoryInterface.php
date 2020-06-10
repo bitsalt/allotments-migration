@@ -11,5 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
  */
 interface LegacyAllotmentRepositoryInterface
 {
-    public function getAllotments(): Collection;
+    public function getAllotments(): array;
+
+    public function getDataByYear(int $year): array;
 }

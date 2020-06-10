@@ -10,6 +10,6 @@ use Illuminate\Support\Collection;
  */
 interface LegacySchoolRepositoryInterface
 {
-    public function allByYear(int $year): Collection;
+    public function getAllDataByYear(int $year): array;
 
 }

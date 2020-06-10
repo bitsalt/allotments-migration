@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Repository\AllotmentTypesRepositoryInterface;
 use App\Repository\CategoriesRepositoryInterface;
 use App\Repository\Eloquent\AllotmentTypesRepository;
-use App\Repository\Eloquent\BaseRepository;
 use App\Repository\Eloquent\CategoriesRepository;
 use App\Repository\Eloquent\GradeLevelRepository;
 use App\Repository\Eloquent\LegacyAllotmentRepository;
@@ -33,10 +32,6 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(
-            EloquentRepositoryInterface::class,
-            BaseRepository::class
-        );
         $this->app->bind(
             SchoolRepositoryInterface::class,
             SchoolRepository::class

@@ -23,22 +23,22 @@ final class CategoriesTest extends TestCase
 
     public function testCanGetDataByYear()
     {
-        $data = $this->categoriesRepository->getDataByYear($this->copyYear);
-        $dataArr = $data->toArray();
-        $this->assertIsArray($dataArr);
+        $data = $this->categoriesRepository->getAllDataByYear($this->copyYear);
+        $this->assertIsArray($data);
     }
 
     public function testCanDoLegacyRolloverOperation()
     {
         $legacyCategories = $this->legacyResourcesRepository->getCategories($this->newYear);
-        $categories = $this->categoriesRepository->rolloverLegacyData($this->newYear, $legacyCategories);
-        $this->assertEquals($this->count($legacyCategories), $this->count($categories));
+        $this->categoriesRepository->rolloverLegacyData($this->newYear, $this->copyYear, $legacyCategories);
+        //$this->assertEquals($this->count($legacyCategories), $this->count($categories));
+        $data = $this->categoriesRepository->getAllDataByYear($this->newYear);
+        $this->assertNotNull($data[0]['category_name']);
     }
 
     public function testAfterLegacyRolloverCategoriesHaveUniqueDisplayOrder()
     {
-        $categories = $this->categoriesRepository->getDataByYear($this->newYear);
-        $categories = $categories->toArray();
+        $categories = $this->categoriesRepository->getAllDataByYear($this->newYear);
         $displayValues = [];
         foreach ($categories as $category) {
             $displayValues[] = $category['display_order'];
@@ -54,12 +54,10 @@ final class CategoriesTest extends TestCase
      */
     public function notestCanDoStandardRolloverOperation()
     {
-        $data = $this->categoriesRepository->getDataByYear($this->copyYear);
-        $dataArr = $data->toArray();
-        $this->categoriesRepository->rolloverYear($this->newYear, $dataArr);
+        $data = $this->categoriesRepository->getAllDataByYear($this->copyYear);
+        $this->categoriesRepository->rolloverYear($this->newYear, $data);
 
-        $newData = $this->categoriesRepository->getDataByYear($this->newYear);
-        $dataArr = $newData->toArray();
-        $this->assertIsArray($dataArr);
+        $newData = $this->categoriesRepository->getAllDataByYear($this->newYear);
+        $this->assertIsArray($newData);
     }
 }
