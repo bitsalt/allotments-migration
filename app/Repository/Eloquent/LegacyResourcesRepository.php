@@ -6,11 +6,13 @@ namespace App\Repository\Eloquent;
 
 use App\AllotmentTypes;
 use App\Categories;
-use Illuminate\Database\Eloquent\Collection;
+use App\Traits\ExceptionLogging;
 use App\LegacyResources;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class LegacyResourcesRepository implements \App\Repository\LegacyResourcesRepositoryInterface
 {
+    use ExceptionLogging;
     private $model;
 
     public function __construct(LegacyResources $model) {
@@ -22,7 +24,8 @@ class LegacyResourcesRepository implements \App\Repository\LegacyResourcesReposi
         $records = $this->getAllDataByYear($year);
         foreach ($records as $record) {
             $newRecord = $this->mapLegacyResourceToAllotmentType($record, $year);
-            AllotmentTypes::create($newRecord);
+            if (!empty($newRecord))
+                AllotmentTypes::create($newRecord);
         }
     }
 
@@ -34,22 +37,27 @@ class LegacyResourcesRepository implements \App\Repository\LegacyResourcesReposi
      */
     public function mapLegacyResourceToAllotmentType($record, $year): array
     {
-        $categoryId = Categories::select('category_id')
-            ->where('category_name', '=', $record['category_name'])
-            ->where('school_year', '=', $year)
-            ->first()
-            ->toArray();
+        try {
+            $categoryId = Categories::select('category_id')
+                ->where('category_name', '=', $record['category_name'])
+                ->where('school_year', '=', $year)
+                ->firstOrFail()
+                ->toArray();
 
-        return [
-            'school_year' => $year,
-            'allotment_prog_code' => $record['resourceid'],
-            'allotment_prog_desc' => $record['category_name'],
-            'category_id' => $categoryId['category_id'],
-            'data_link' => $record['data_link'],
-            'is_carryover' => 0,
-            'date_created' => date('Y-m-d H:i:s'),
-            'date_modified' => null,
-        ];
+            return [
+                'school_year' => $year,
+                'allotment_prog_code' => $record['resourceid'],
+                'allotment_prog_desc' => $record['category_name'],
+                'category_id' => $categoryId['category_id'],
+                'data_link' => $record['data_link'],
+                'is_carryover' => 0,
+                'date_created' => date('Y-m-d H:i:s'),
+                'date_modified' => null,
+            ];
+        }  catch (ModelNotFoundException $exception) {
+            $this->logError(get_class($this), __FUNCTION__, ['year' => $year, 'record' => $record]);
+        }
+        return [];
     }
 
     public function getCategories(int $year): array

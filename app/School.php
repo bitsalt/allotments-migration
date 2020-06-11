@@ -25,4 +25,5 @@ class School extends Model
      */
     protected $fillable = ['school', 'school_year', 'school_name', 'magnet_ind', 'restart_ind', 'school_grade_level_id', 'school_type_id', 'date_created', 'date_modified', 'has_schedule_assistance', 'schedule_assistance_hours'];
 
+    public $timestamps = false;
 }

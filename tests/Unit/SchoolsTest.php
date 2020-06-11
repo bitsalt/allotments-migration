@@ -25,7 +25,7 @@ class SchoolsTest extends TestCase
     public function testCanGetTargetYearSchools()
     {
         $schools = $this->schoolsRepository->getAllDataByYear($this->targetYear);
-        $this->assertEquals(170, count($schools));
+        $this->assertEquals(174, count($schools));
     }
 
     public function testCanMatchLegacySchoolToTargetYearSchool()
@@ -43,7 +43,7 @@ class SchoolsTest extends TestCase
         $this->assertGreaterThan(100, count($matches));
     }
 
-    public function NOTtestCanRolloverYear()
+    public function testCanRolloverYear()
     {
         $legacySchools = $this->legacySchoolRepository->getAllDataByYear($this->newYear);
         $result = $this->schoolsRepository->legacyRolloverYear($this->newYear, $this->targetYear, $legacySchools);

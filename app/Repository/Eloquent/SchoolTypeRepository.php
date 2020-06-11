@@ -8,6 +8,7 @@ use App\SchoolType;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use App\Repository\SchoolTypeRepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SchoolTypeRepository implements SchoolTypeRepositoryInterface
 {
@@ -24,12 +25,17 @@ class SchoolTypeRepository implements SchoolTypeRepositoryInterface
     public function rolloverYear(int $newYear, array $schoolTypeData): Collection
     {
         foreach ($schoolTypeData as $schoolType) {
-            $type = $this->model::where([
-                'id' => $schoolType['id']
-            ]);
-            $newType = $this->model->replicate();
-            $newType->save();
-            $newType->update(['school_year' => $newYear]);
+            try {
+                $type = $this->model::where('id', '=', $schoolType['id'])
+                    ->firstOrFail()
+                    ->toArray();
+                $type['school_year'] = $newYear;
+                unset($type['id']);
+                $this->model::create($type);
+            }  catch (ModelNotFoundException $exception) {
+                $this->logError(get_class($this), __FUNCTION__, ['year' => $newYear,
+                    'school type data' => $schoolTypeData]);
+            }
         }
         return $this->getDataByYear($newYear);
     }
