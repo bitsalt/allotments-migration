@@ -35,7 +35,7 @@ class CategoriesRepository implements \App\Repository\CategoriesRepositoryInterf
      * @param int $newYear
      * @param array $categoryData
      */
-    public function rolloverLegacyData(int $newYear, int $copyYear, array $categoryData):void
+    public function rolloverLegacyData(int $newYear, int $copyYear, array $categoryData): array
     {
         $displayOrder = 1;
         foreach ($categoryData as $categoryName) {
@@ -58,6 +58,7 @@ class CategoriesRepository implements \App\Repository\CategoriesRepositoryInterf
             }
             $displayOrder++;
         }
+        return $this->getAllDataByYear($newYear);
     }
 
 

@@ -21,4 +21,6 @@ class NewParms extends Model
      * @var string
      */
     protected $table = 'newparms';
+
+    public $timestamps = false;
 }

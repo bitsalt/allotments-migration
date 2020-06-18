@@ -17,4 +17,5 @@ class ReportingDays extends Model
      */
     protected $fillable = ['school_year', 'report_days', 'order_id'];
 
+    public $timestamps = false;
 }

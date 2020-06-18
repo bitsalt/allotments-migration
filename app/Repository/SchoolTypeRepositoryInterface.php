@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Collection;
  */
 interface SchoolTypeRepositoryInterface
 {
-    public function rolloverYear(int $newYear, array $schoolTypeData): Collection;
-
+    public function rolloverLegacyYear(int $newYear): array;
+    public function rolloverYear(int $newYear, int $targetYear): array;
+    public function getAllDataByYear($year): array;
+    public function getIdByYearAndType(int $year, string $type): int;
 }

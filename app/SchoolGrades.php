@@ -16,4 +16,9 @@ class SchoolGrades extends Model
      */
     protected $fillable = ['school_id', 'school_year', 'grade_id'];
 
+    public $timestamps = false;
+
+    protected $primaryKey = false;
+
+    public $incrementing = false;
 }

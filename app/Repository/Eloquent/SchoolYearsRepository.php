@@ -24,16 +24,16 @@ class SchoolYearsRepository implements \App\Repository\SchoolYearsRepositoryInte
         $this->model = $model;
     }
 
-    public function getCurrentYear(int $year): Collection {
-        return $this->model::where([
-            'current_ind' => 1
-        ])->get();
+    public function getCurrentYear(): array {
+        return $this->model::where('current_ind', '=', 1)
+            ->first()
+            ->toArray();
     }
 
-    public function getCurrentAdminYear(int $year): Collection {
-        return $this->model::where([
-            'admin_current_ind' => 1
-        ])->get();
+    public function getCurrentAdminYear(): array {
+        return $this->model::where('admin_current_ind', '=', 1)
+            ->first()
+            ->toArray();
     }
 
     public function addSchoolYear($year, $displayYears): Model {
@@ -48,15 +48,11 @@ class SchoolYearsRepository implements \App\Repository\SchoolYearsRepositoryInte
     }
 
 
-    public function getAllSchoolYears(): Collection {
-        return $this->model->all();
-    }
-
     public function getAllDataByYear(int $year): array
     {
-        return $this->model::where([
-            'school_year' => $year
-        ])->firstOrFail()->toArray();
+        return $this->model::where('school_year', '=', $year)
+            ->firstOrFail()
+            ->toArray();
     }
 
 }

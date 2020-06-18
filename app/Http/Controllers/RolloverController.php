@@ -5,10 +5,15 @@ namespace App\Http\Controllers;
 use App\LegacySchools;
 use App\Repository\CategoriesRepositoryInterface;
 use App\Repository\GradeLevelRepositoryInterface;
+use App\Repository\GradesRepositoryInterface;
 use App\Repository\LegacyAllotmentRepositoryInterface;
 use App\Repository\LegacyResourcesRepositoryInterface;
 use App\Repository\LegacySchoolRepositoryInterface;
+use App\Repository\NewParmsRepositoryInterface;
+use App\Repository\ReportingDaysRepositoryInterface;
+use App\Repository\SchoolGradesRepositoryInterface;
 use App\Repository\SchoolRepositoryInterface;
+use App\Repository\SchoolsRepositoryInterface;
 use App\Repository\SchoolTypeRepositoryInterface;
 use App\Repository\SchoolYearsRepositoryInterface;
 use App\SchoolType;
@@ -39,14 +44,18 @@ class RolloverController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(
-        SchoolRepositoryInterface $schoolRepository,
+        SchoolsRepositoryInterface $schoolsRepository,
         LegacySchoolRepositoryInterface $legacySchoolRepository,
         SchoolYearsRepositoryInterface $schoolYearsRepository,
         SchoolTypeRepositoryInterface $schoolTypeRepository,
         GradeLevelRepositoryInterface $gradeLevelRepository,
         LegacyResourcesRepositoryInterface $legacyResourcesRepository,
         CategoriesRepositoryInterface $categoriesRepository,
-        LegacyAllotmentRepositoryInterface $legacyAllotmentRepository
+        LegacyAllotmentRepositoryInterface $legacyAllotmentRepository,
+        ReportingDaysRepositoryInterface $reportingDaysRepository,
+        NewParmsRepositoryInterface $newParmsRepository,
+        GradesRepositoryInterface $gradesRepository,
+        SchoolGradesRepositoryInterface $schoolGradesRepository
         )
     {
 
@@ -56,38 +65,46 @@ class RolloverController extends Controller
         $copyYear = 2013;
 
             /** Begin test bed **/
-//        $resources = $legacyResourcesRepository->getCategories($newYear);
-//        dd($resources);
+//        $result = $schoolGradesRepository->rolloverLegacyYear($newYear, $copyYear);
+//        dd($result);
 
             /** End test bed **/
 
         // ...school year
         $ret = $schoolYearsRepository->addSchoolYear($newYear, '2006-2007');
-        $mod = $schoolYearsRepository->getSchoolYearDataByYear($newYear);
-        $newSchoolYear = $mod->toArray();
+        $newSchoolYear = $schoolYearsRepository->getAllDataByYear($newYear);
 
         // ...school types
-        $stCollection = $schoolTypeRepository->getDataByYear($copyYear);
-        $types = $stCollection->toArray();
-        $typesColl = $schoolTypeRepository->rolloverYear($newYear, $types);
-        $schoolTypes = $typesColl->toArray();
+        $schoolTypes = $schoolTypeRepository->rolloverYear($newYear, $copyYear);
+
 
         // ...grade levels
-        $glCollection = $gradeLevelRepository->getDataByYear($copyYear);
-        $gradeLevels = $glCollection->toArray();
-        $gradeLevelsColl = $gradeLevelRepository->rolloverYear($newYear, $gradeLevels);
-        $rolloverGradeLevels = $gradeLevelsColl->toArray();
+        $rolloverGradeLevels = $gradeLevelRepository->rolloverYear($newYear, $copyYear);
 
         // ...categories - uses the Resources repository, but must be processed first
-        $categoriesCollection = $legacyResourcesRepository->getCategories($newYear);
-        $categories = $categoriesRepository->rolloverLegacyData($newYear, $copyYear, $categoriesCollection);
+        $categoriesArr = $legacyResourcesRepository->getCategories($newYear);
+        $categories = $categoriesRepository->rolloverLegacyData($newYear, $copyYear, $categoriesArr);
 
         // ...resources
-         $resourcesCollection = $legacyResourcesRepository->getResources($newYear);
+        $legacyResourcesRepository->rolloverLegacyData($newYear);
+//         $resourcesCollection = $legacyResourcesRepository->getResources($newYear);
 
         // ...allotment types
-        $legacyAllotmentsCollection = $legacyAllotmentRepository->getAllotments();
-        $legacyAllotments = $legacyAllotmentsCollection->toArray();
+        $legacyAllotments = $legacyAllotmentRepository->getAllotments();
+
+        // reporting days
+        $reportingDaysRepository->rolloverYear($newYear, $copyYear);
+
+
+        // new parms
+        $newParmsRepository->rolloverYear($newYear, $copyYear);
+
+        // grades
+        $gradesRepository->rolloverYear($newYear, $copyYear);
+
+
+        // school_grades
+        $result = $schoolGradesRepository->rolloverLegacyYear($newYear, $copyYear);
 
 
 //        $data = [
