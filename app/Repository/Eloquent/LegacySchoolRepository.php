@@ -65,4 +65,10 @@ class LegacySchoolRepository implements LegacySchoolRepositoryInterface
 
         return $this->schoolData;
     }
+
+    public function getRecordsCount(): int
+    {
+        $records = $this->model::all();
+        $records->count();
+    }
 }

@@ -15,7 +15,7 @@ class NewParmsRepository implements \App\Repository\NewParmsRepositoryInterface
         $this->model = $model;
     }
 
-    public function rolloverYear(int $newYear, int $copyYear): array
+    public function rolloverYear(int $newYear, int $copyYear): bool
     {
         $newparmsData = $this->getDataByYear($copyYear);
 
@@ -26,10 +26,11 @@ class NewParmsRepository implements \App\Repository\NewParmsRepositoryInterface
             } catch (ModelNotFoundException $exception) {
                 $this->logError(get_class($this), __FUNCTION__, ['newYear' => $newYear,
                     'copyYear' => $copyYear]);
+                return false;
             }
         }
 
-        return $this->getDataByYear($newYear);
+        return true;
     }
 
     public function getDataByYear(int $year): array
@@ -37,5 +38,11 @@ class NewParmsRepository implements \App\Repository\NewParmsRepositoryInterface
         return $this->model::where('school_year', '=', $year)
             ->get()
             ->toArray();
+    }
+
+    public function getRecordsCount(): int
+    {
+        $records = $this->model::all();
+        $records->count();
     }
 }

@@ -14,4 +14,5 @@ interface LegacySchoolRepositoryInterface
     public function getCountByYear($year): int;
     public function isMagnetSchool(): bool;
     public function getSchoolDataById($id): array;
+    public function getRecordsCount(): int;
 }

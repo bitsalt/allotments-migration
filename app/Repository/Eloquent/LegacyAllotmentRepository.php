@@ -25,12 +25,18 @@ class LegacyAllotmentRepository implements \App\Repository\LegacyAllotmentReposi
     /**
      * Override BaseRepository.getDataByYear()
      * @param int $year
-     * @return Collection
+     * @return array
      */
-    public function getDataByYear(int $year): array
+    public function getAllDataByYear(int $year): array
     {
         return $this->model::where('year', '=', $year)
             ->get()
             ->toArray();
+    }
+
+    public function getRecordsCount(): int
+    {
+        $records = $this->model::all();
+        $records->count();
     }
 }

@@ -21,8 +21,8 @@ class IGradesTest extends \Tests\TestCase
     public function testCanDoRolloverOperation() {
         $newYear = 2006;
         $copyYear = 2013;
-        $newData = $this->gradesRepository->rolloverYear($newYear, $copyYear);
-
+        $this->gradesRepository->rolloverYear($newYear, $copyYear);
+        $newData = $this->gradesRepository->getDataByYear($newYear);
         $copyData = $this->gradesRepository->getDataByYear($copyYear);
         $this->assertEquals(count($newData), count($copyData));
     }

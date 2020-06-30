@@ -6,10 +6,12 @@ namespace App\Repository\Eloquent;
 
 use App\Repository\GradesRepositoryInterface;
 use App\Repository\SchoolsRepositoryInterface;
+use App\Repository\SchoolGradesRepositoryInterface;
 use App\School;
 use App\SchoolGrades;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class SchoolGradesRepository implements \App\Repository\SchoolGradesRepositoryInterface
+class SchoolGradesRepository implements SchoolGradesRepositoryInterface
 {
 
     private $model;
@@ -43,7 +45,7 @@ class SchoolGradesRepository implements \App\Repository\SchoolGradesRepositoryIn
         return $this->getDataByYear($newYear);
     }
 
-    public function rolloverLegacyYear(int $newYear): array
+    public function rolloverLegacyYear(int $newYear): bool
     {
         // map grade levels to array for school grades inserts
         $map = [
@@ -55,19 +57,26 @@ class SchoolGradesRepository implements \App\Repository\SchoolGradesRepositoryIn
         ];
         $schoolData = $this->schoolsRepository->getAllDataByYear($newYear);
 
+        $count = 0;
         foreach ($schoolData as $school) {
             $gradeLevelData = School::find($school['id'])->gradeLevel->toArray();
             $schoolGradesArr = $map[$gradeLevelData['grade_level']];
 
             foreach ($schoolGradesArr as $grade) {
-                $this->model::create([
-                    'school_id' => $school['id'],
-                    'school_year' => $newYear,
-                    'grade_id' => $this->gradesRepository->getIdByGrade($grade, $newYear)
-                ]);
+                try {
+                    $this->model::create([
+                        'school_id' => $school['id'],
+                        'school_year' => $newYear,
+                        'grade_id' => $this->gradesRepository->getIdByGrade($grade, $newYear)
+                    ]);
+                    $count++;
+                } catch (ModelNotFoundException $exception) {
+                    $this->logError(get_class($this), __FUNCTION__, ['year' => $newYear]);
+                    return false;
+                }
             }
         }
-        return $this->getAllDataByYear($newYear);
+        return true;
     }
 
     public function getAllDataByYear(int $year): array
@@ -75,5 +84,11 @@ class SchoolGradesRepository implements \App\Repository\SchoolGradesRepositoryIn
         return $this->model::where('school_year', '=', $year)
             ->get()
             ->toArray();
+    }
+
+    public function getRecordsCount(): int
+    {
+        $records = $this->model::all();
+        $records->count();
     }
 }

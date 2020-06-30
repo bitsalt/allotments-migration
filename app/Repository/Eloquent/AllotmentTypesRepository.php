@@ -22,4 +22,10 @@ class AllotmentTypesRepository implements \App\Repository\AllotmentTypesReposito
             ->get()
             ->toArray();
     }
+
+    public function getRecordsCount(): int
+    {
+        $records = $this->model::all();
+        $records->count();
+    }
 }

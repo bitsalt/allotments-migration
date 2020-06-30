@@ -21,8 +21,8 @@ class GReportingDaysTest extends \Tests\TestCase
     public function testCanDoRolloverOperation() {
         $newYear = 2006;
         $copyYear = 2013;
-        $newData = $this->reportingDaysRepository->rolloverYear($newYear, $copyYear);
-
+        $this->reportingDaysRepository->rolloverYear($newYear, $copyYear);
+        $newData = $this->reportingDaysRepository->getDataByYear($newYear);
         $copyData = $this->reportingDaysRepository->getDataByYear($copyYear);
         $this->assertEquals(count($newData), count($copyData));
     }

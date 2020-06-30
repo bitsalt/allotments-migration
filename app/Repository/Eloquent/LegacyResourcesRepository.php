@@ -19,14 +19,21 @@ class LegacyResourcesRepository implements \App\Repository\LegacyResourcesReposi
         $this->model = $model;
     }
 
-    public function rolloverLegacyData(int $year): void
+    public function rolloverLegacyData(int $year): bool
     {
         $records = $this->getAllDataByYear($year);
         foreach ($records as $record) {
             $newRecord = $this->mapLegacyResourceToAllotmentType($record, $year);
-            if (!empty($newRecord))
-                AllotmentTypes::create($newRecord);
+            if (!empty($newRecord)) {
+                try {
+                    AllotmentTypes::create($newRecord);
+                } catch (ModelNotFoundException $exception) {
+                    $this->logError(get_class($this), __FUNCTION__, ['year' => $year]);
+                    return false;
+                }
+            }
         }
+        return true;
     }
 
     /**
@@ -79,4 +86,9 @@ class LegacyResourcesRepository implements \App\Repository\LegacyResourcesReposi
             ->toArray();
     }
 
+    public function getRecordsCount(): int
+    {
+        $records = $this->model::all();
+        $records->count();
+    }
 }

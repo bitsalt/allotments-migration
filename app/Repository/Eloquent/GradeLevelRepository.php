@@ -18,7 +18,7 @@ class GradeLevelRepository implements \App\Repository\GradeLevelRepositoryInterf
 
     public function rolloverYear(int $newYear, int $copyYear): array
     {
-        $gradeLevelData = $this->getDataByYear($copyYear);
+        $gradeLevelData = $this->getAllDataByYear($copyYear);
         foreach ($gradeLevelData as $schoolType) {
             try {
                 $type = $this->model::where('id', '=', $schoolType['id'])
@@ -32,13 +32,27 @@ class GradeLevelRepository implements \App\Repository\GradeLevelRepositoryInterf
             }
 
         }
-        return $this->getDataByYear($newYear);
+        return $this->getAllDataByYear($newYear);
     }
 
-    public function getDataByYear(int $year): array
+    public function getGradeLevelById(int $id): string
+    {
+        $data = $this->model::where('id', '=', $id)
+            ->get()
+            ->toArray();
+        return $data[0]['grade_level'];
+    }
+
+    public function getAllDataByYear(int $year): array
     {
         return $this->model::where('school_year', '=', $year)
             ->get()
             ->toArray();
+    }
+
+    public function getRecordsCount(): int
+    {
+        $records = $this->model::all();
+        $records->count();
     }
 }

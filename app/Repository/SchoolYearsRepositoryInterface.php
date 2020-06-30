@@ -15,4 +15,5 @@ interface SchoolYearsRepositoryInterface
     public function getCurrentAdminYear(): array;
     public function addSchoolYear(int $year, string $displayYears): Model;
     public function getAllDataByYear(int $year): array;
+    public function getRecordsCount(): int;
 }

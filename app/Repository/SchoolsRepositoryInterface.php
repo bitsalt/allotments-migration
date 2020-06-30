@@ -12,4 +12,6 @@ interface SchoolsRepositoryInterface
     public function getSchoolCountByYear(int $year): int;
     public function addNewSchool(array $data): bool;
     public function getSchoolIdBySchoolNum(int $schoolNum, int $year): int;
+    public function getRecordsCount(): int;
+    public function getSchoolGradeLevelIdByLevel(string $level, int $year): int;
 }

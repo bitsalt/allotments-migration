@@ -27,7 +27,9 @@ class School extends Model
 
     public $timestamps = false;
 
-    public function gradeLevel(){
+    public function gradeLevel()
+    {
         return $this->hasOne('App\GradeLevel', 'id', 'school_grade_level_id');
     }
+
 }

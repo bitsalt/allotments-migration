@@ -14,7 +14,7 @@ final class CGradeLevelTest extends TestCase {
     }
 
     public function testCanGetDataByYear() {
-        $data = $this->gradeLevelRepository->getDataByYear(2013);
+        $data = $this->gradeLevelRepository->getAllDataByYear(2013);
         $this->assertIsArray($data);
     }
 
@@ -23,7 +23,7 @@ final class CGradeLevelTest extends TestCase {
         $copyYear = 2013;
         $this->gradeLevelRepository->rolloverYear($newYear, $copyYear);
 
-        $newData = $this->gradeLevelRepository->getDataByYear($newYear);
+        $newData = $this->gradeLevelRepository->getAllDataByYear($newYear);
         $this->assertNotNull($newData[0]['grade_level_name']);
     }
 

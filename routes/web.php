@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/rollover', 'RolloverController@index');
+Route::post('rollover/{rolloverStep}', 'RolloverController@index');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'IndexController@index');
 

@@ -6,8 +6,6 @@ namespace App\Repository\Eloquent;
 
 use Illuminate\Database\Eloquent\Collection;
 use App\Categories;
-use Illuminate\Database\Eloquent\Model;
-use function PHPUnit\Framework\isEmpty;
 
 class CategoriesRepository implements \App\Repository\CategoriesRepositoryInterface
 {
@@ -90,5 +88,11 @@ class CategoriesRepository implements \App\Repository\CategoriesRepositoryInterf
         return $this->model::where('school_year', '=', $year)
             ->get()
             ->toArray();
+    }
+
+    public function getRecordsCount(): int
+    {
+        $records = $this->model::all();
+        $records->count();
     }
 }

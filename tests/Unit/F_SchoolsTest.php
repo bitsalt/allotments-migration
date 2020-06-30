@@ -47,11 +47,38 @@ class FSchoolsTest extends TestCase
     // by legacyRolloverYear. The assertion is '1' as there is a school from 2006 that was
     // split up and renamed by 2013.
     // NOTE: This school will likely come up when testing other years.
+    // UPDATE: This breaks things as it trickles down, so...finding a way to include all
+    // schools. Also adding the test below to ensure that all fields are properly set
+    // for legacy schools.
     public function testCanRolloverYear()
     {
         $legacySchools = $this->legacySchoolRepository->getAllDataByYear($this->newYear);
+        $expected = count($legacySchools);
         $result = $this->schoolsRepository->legacyRolloverYear($this->newYear, $this->targetYear, $legacySchools);
-        $this->assertEquals(1, $result);
+        $actual = count($this->schoolsRepository->getAllDataByYear($this->newYear));
+        $this->assertEquals($expected, $actual);
+    }
+
+    // This is more functional test than unit test, as it requires the preceding testCanRolloverYear()
+    // to have already run.
+    public function testCanRolloverYearWithAllData()
+    {
+        $testData = $this->schoolsRepository->getSchoolBySchoolNum(411, $this->newYear);
+        $mockData = [
+            'school_name' => 'East Wake High',
+            'school_grade_level_id' => 43,
+            'magnet_ind' => null,
+            'restart_ind' => null,
+            'school_type_id' => 48,
+        ];
+        $result = true;
+        foreach ($mockData as $key => $val) {
+            if ($testData[$key] != $val) {
+                $result = false;
+                break;
+            }
+        }
+        $this->assertTrue($result);
     }
 
     public function testWillNotAddSchoolWithBadData()

@@ -21,8 +21,8 @@ class HNewParmsTest extends \Tests\TestCase
     public function testCanDoRolloverOperation() {
         $newYear = 2006;
         $copyYear = 2013;
-        $newData = $this->newparmsRepository->rolloverYear($newYear, $copyYear);
-
+        $ret = $this->newparmsRepository->rolloverYear($newYear, $copyYear);
+        $newData = $this->newparmsRepository->getDataByYear($newYear);
         $copyData = $this->newparmsRepository->getDataByYear($copyYear);
         $this->assertEquals(count($newData), count($copyData));
     }

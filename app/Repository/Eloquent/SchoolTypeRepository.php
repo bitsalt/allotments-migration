@@ -31,14 +31,20 @@ class SchoolTypeRepository implements SchoolTypeRepositoryInterface
         // create unique records based on data from all schools
         $data = [];
         foreach ($legacyData as $school) {
+            $type = $this->mapLegacyTypes($school['type']);
+            if (in_array($type, $data)) {
+                continue;
+            }
+            $data[] = $type;
 
             $this->model::create([
                 'school_year' => $newYear,
-                'school_type' => $this->mapLegacyTypes($school['type']),
+                'school_type' => $type,
                 'school_type_name' => $this->mapLegacyTypeDescriptions([$school['type']]),
                 'override1' => null,
             ]);
         }
+
         return $this->getAllDataByYear($newYear);
     }
 
@@ -74,15 +80,15 @@ class SchoolTypeRepository implements SchoolTypeRepositoryInterface
 
     public function getIdByYearAndType(int $year, string $type): int
     {
+        $filteredType = $this->mapLegacyTypes($type);
         try {
             $schoolTypeId = $this->model::where('school_year', '=', $year)
-                ->where('school_type', '=', $type)
+                ->where('school_type', '=', $filteredType)
                 ->firstOrFail()
                 ->toArray();
             return $schoolTypeId['id'];
         } catch (ModelNotFoundException $exception) {
-            return 0;
-//            $this->logError(get_class($this), __FUNCTION__, ['year' => $year, 'type' => $type]);
+            $this->logError(get_class($this), __FUNCTION__, ['year' => $year, 'type' => $type]);
         }
     }
 
@@ -112,5 +118,11 @@ class SchoolTypeRepository implements SchoolTypeRepositoryInterface
         ];
 
         return $map[$type[0]];
+    }
+
+    public function getRecordsCount(): int
+    {
+        $records = $this->model::all();
+        $records->count();
     }
 }

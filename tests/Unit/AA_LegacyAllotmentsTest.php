@@ -19,7 +19,7 @@ class AALegacyAllotmentsTest extends TestCase
 
     public function testCanGetLegacyAllotmentRecords()
     {
-        $allotments = $this->legacyAllotmentRepository->getDataByYear(2006);
+        $allotments = $this->legacyAllotmentRepository->getAllDataByYear(2006);
         $this->assertEquals(4942, count($allotments));
     }
 }

@@ -62,7 +62,7 @@
 
 
         <div class="page-wrapper">
-            <div class="container-fluid">
+            <div class="container-fluid w-75 p-3">
                 <main class="py-4">
                     @yield('content')
                 </main>

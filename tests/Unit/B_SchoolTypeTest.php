@@ -24,7 +24,7 @@ final class CSchoolTypeTest extends TestCase {
         $this->schoolTypeRepository->rolloverLegacyYear($newYear);
 
         $newData = $this->schoolTypeRepository->getAllDataByYear($newYear);
-        $this->assertIsArray($newData);
+        $this->assertEquals(3, count($newData));
     }
 
 

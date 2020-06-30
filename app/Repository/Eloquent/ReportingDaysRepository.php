@@ -14,7 +14,7 @@ class ReportingDaysRepository implements \App\Repository\ReportingDaysRepository
         $this->model = $model;
     }
 
-    public function rolloverYear(int $newYear, int $copyYear): array
+    public function rolloverYear(int $newYear, int $copyYear): bool
     {
         $daysData = $this->getDataByYear($copyYear);
 
@@ -27,10 +27,11 @@ class ReportingDaysRepository implements \App\Repository\ReportingDaysRepository
             } catch (ModelNotFoundException $exception) {
                 $this->logError(get_class($this), __FUNCTION__, ['newYear' => $newYear,
                     'copyYear' => $copyYear]);
+                return false;
             }
         }
 
-        return $this->getDataByYear($newYear);
+        return true;
     }
 
     public function getDataByYear(int $year): array
@@ -38,5 +39,11 @@ class ReportingDaysRepository implements \App\Repository\ReportingDaysRepository
         return $this->model::where('school_year', '=', $year)
             ->get()
             ->toArray();
+    }
+
+    public function getRecordsCount(): int
+    {
+        $records = $this->model::all();
+        $records->count();
     }
 }

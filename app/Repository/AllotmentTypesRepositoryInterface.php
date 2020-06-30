@@ -8,4 +8,5 @@ interface AllotmentTypesRepositoryInterface
 {
 
     public function getAllDataByYear($year): array;
+    public function getRecordsCount(): int;
 }

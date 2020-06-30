@@ -55,4 +55,10 @@ class SchoolYearsRepository implements \App\Repository\SchoolYearsRepositoryInte
             ->toArray();
     }
 
+    public function getRecordsCount(): int
+    {
+        $records = $this->model::all();
+        return $records->count();
+    }
+
 }

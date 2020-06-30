@@ -17,4 +17,5 @@ interface CategoriesRepositoryInterface {
     public function getCategoryByName($name, $year): array;
     public function rolloverLegacyData(int $newYear, int $copyYear, array $categoryData): array;
     public function getAllDataByYear(int $year): array;
+    public function getRecordsCount(): int;
 }

@@ -15,7 +15,7 @@ class GradesRepository implements \App\Repository\GradesRepositoryInterface
         $this->model = $model;
     }
 
-    public function rolloverYear(int $newYear, int $copyYear): array
+    public function rolloverYear(int $newYear, int $copyYear): bool
     {
         $allYearData = $this->getDataByYear($copyYear);
 
@@ -28,10 +28,10 @@ class GradesRepository implements \App\Repository\GradesRepositoryInterface
             } catch (ModelNotFoundException $exception) {
                 $this->logError(get_class($this), __FUNCTION__, ['newYear' => $newYear,
                     'copyYear' => $copyYear]);
+                return false;
             }
         }
-
-        return $this->getDataByYear($newYear);
+        return true;
     }
 
     public function getDataByYear(int $year): array
@@ -48,5 +48,11 @@ class GradesRepository implements \App\Repository\GradesRepositoryInterface
             ->first()
             ->toArray();
         return $data['id'];
+    }
+
+    public function getRecordsCount(): int
+    {
+        $records = $this->model::all();
+        $records->count();
     }
 }

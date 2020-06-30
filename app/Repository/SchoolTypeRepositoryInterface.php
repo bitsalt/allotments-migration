@@ -16,4 +16,5 @@ interface SchoolTypeRepositoryInterface
     public function rolloverYear(int $newYear, int $targetYear): array;
     public function getAllDataByYear($year): array;
     public function getIdByYearAndType(int $year, string $type): int;
+    public function getRecordsCount(): int;
 }

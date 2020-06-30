@@ -1,85 +1,55 @@
-const getFileList = function(case_id) {
-    $.ajax({
-        type: 'POST',
-        url: "/casefiles",
-        data: {
-            caseId: case_id
-        },
-        cache: false,
-        success: function (data) {
-            $("#fileList").html(data);
-            $(".filelink").unbind().bind('click', getfile);
-            $(".dellink").unbind().bind('click', delfile);
+function makeVisible(divID) {
+    const div = document.getElementById(divID);
+    if (div.classList.contains('invisible')) {
+        div.classList.remove('invisible');
+        //div.scrollIntoView();
+        //div.scroll(0, 800);
+    }
+}
 
+function rolloverSteps(stepNum) {
+
+    if (undefined === stepNum) {
+        stepNum = 1;
+    }
+    $('#spinner').show();
+
+    truncateYear = 0;
+    if ($('#truncateYear').prop('checked') && stepNum == 1) {
+        truncateYear = 1;
+    }
+
+    urlString = 'rollover/' + stepNum;
+    $.ajax(urlString, {
+        type: 'POST',
+        data: {
+            'year': $('#yearSelect').val(),
+            'truncateYear': truncateYear,
         },
-        error: function(xhr, status, err) {
-            //console.error(this.props.url, status. err.toString());
-            var retstr = 'js error...<br />';
-            retstr+= 'status: ' + status + ' error: ' + err.toString();
-            retstr+= '<br />' + xhr.responseText;
-            $("#debug_panel").html(retstr);
+        dataType: 'json',
+        success: function(returnData) {
+            resultText = '<div class="row"><h4>' + returnData.msg + '</h4>';
+            msg = resultText.concat('<p><strong>Metric</strong>: ' + returnData.metric +
+                '<br><strong>Expected</strong>: ' + returnData.expected +
+                '<br><strong>Actual</strong>: ' + returnData.actual + '</p></div>');
+            showRolloverStep(msg);
+            $(document).scrollTop($(document).height());
+            console.log(JSON.stringify(returnData, null, 4));
+            if (returnData.result == 1 && returnData.nextStep > 0) {
+                rolloverSteps(returnData.nextStep)
+            } else {
+                $('#spinner').hide();
+                return true;
+            }
+        },
+        error: function(returnData) {
+            console.log('Error: ' + JSON.stringify(returnData, null, 4));
         }
     });
 }
 
-const getfile = function() {
-    var filename = $(this).attr('data-filename');
-    var file_id = $(this).attr('data-fileid');
-    var transfer_method = $(this).attr('data-trmethod');
-    //alert(filename);
-
-    var fileform = $('<form>', {
-        'action': "/getfile",
-        'method': 'post',
-        'target': '_blank'
-    }).append($('<input>', {
-        'name': 'filename',
-        'value': filename,
-        'type': 'hidden'
-    }).append($('<input>', {
-        'name': 'file_id',
-        'value': file_id,
-        'type': 'hidden'
-    }).append($('<input>', {
-        'name': 'transfer_method',
-        'value': transfer_method,
-        'type': 'hidden'
-    }).append($('<input>', {
-        'name': '_token',
-        'value':  $("#crsf").val(),
-        'type': 'hidden'
-    })))));
-
-
-    fileform.appendTo('body').submit().remove();
-}
-
-const delfile = function(case_obj) {
-    if(confirm("Are you sure you want to delete this file?"))
-    {
-        const caseId = $(this).attr("data-fileid");
-        $.ajax({
-            type: 'POST',
-            url: "/cases/deletefile",
-            data: {
-                case_id: caseId,
-                file_name: $(this).attr("data-filename")
-            },
-            dataType: "json",
-            //async: false,
-            cache: false,
-            success: function (data) {
-                //alert(JSON.stringify(data));
-                getFileList(caseId);
-            },
-            error: function(xhr, status, err) {
-                //console.error(this.props.url, status. err.toString());
-                var retstr = 'js error...<br />';
-                retstr+= 'status: ' + status + ' error: ' + err.toString();
-                retstr+= '<br />' + xhr.responseText;
-                $("#debug_panel").html(retstr);
-            }
-        });
-    }
+function showRolloverStep(msg) {
+    const div = document.getElementById('serverResponse');
+    div.innerHTML += msg;
 }
 

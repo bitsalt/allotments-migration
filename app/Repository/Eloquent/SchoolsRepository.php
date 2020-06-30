@@ -53,46 +53,40 @@ class SchoolsRepository implements SchoolsRepositoryInterface
             ->count();
     }
 
+    public function getSchoolGradeLevelIdByLevel(string $level, int $year): int
+    {
+        $data = GradeLevel::select('id')
+            ->where('school_year', '=', $year)
+            ->where('grade_level', '=', $level)
+            ->first()
+            ->toArray();
+        return $data['id'];
+    }
+
+
     public function legacyRolloverYear(int $newYear, int $targetYear, array $legacySchools): int
     {
-        $legacySchoolCount = count($legacySchools);
-        //$currentSchoolCount = $this->getSchoolCountByYear($targetYear);
-
         foreach ($legacySchools as $legacySchool) {
             $matchingCurrentSchool = $this->matchLegacySchoolToTargetYearSchool($targetYear, $legacySchool);
 
-            $gradeLevelId = GradeLevel::select('id')
-                ->where('school_year', '=', $newYear)
-                ->where('grade_level', '=', $legacySchool['gradelevel'])
-                ->first()
-                ->toArray();
+            $gradeLevelId =$this->getSchoolGradeLevelIdByLevel($legacySchool['gradelevel'], $newYear);
 
-//            try {
-//                $schoolTypeId = SchoolType::select('id')
-//                    ->where('school_year', '=', $newYear)
-//                    ->where('school_type', '=', $legacySchool['type'])
-//                    ->firstOrFail()
-//                    ->toArray();
-//            } catch (ModelNotFoundException $exception) {
-//                $this->logError(get_class($this), __FUNCTION__, ['query' => $schoolTypeId]);
-//            }
-            $schoolTypeId = $this->schoolTypeRepository->getIdByYearAndType($newYear, $legacySchool['gradelevel']);
+            $schoolTypeId = $this->schoolTypeRepository->getIdByYearAndType($newYear, $legacySchool['type']);
 
-            $isMagnet = ($legacySchool['type'] == 'TR-MG'
-                        || $legacySchool['type'] == 'YR-MG') ?
-                'M' : null;
+
+            $isMagnet = (strstr($legacySchool['type'], '-MG')) ? 'M' : null;
             $data = [
                 'school' => $legacySchool['schoolid'],
                 'school_year' => $newYear,
                 'school_name' => $legacySchool['schoolname'],
                 'magnet_ind' => $isMagnet,
                 'restart_ind' => null,
-                'school_grade_level_id' => $gradeLevelId['id'],
+                'school_grade_level_id' => $gradeLevelId,
                 'school_type_id' => $schoolTypeId,
                 'date_created' => date('Y-m-d H:i:s'),
                 'date_modified' => null,
-                'has_schedule_assistance' => '',
-                'schedule_assistance_hours' => ''
+                'has_schedule_assistance' => 0,
+                'schedule_assistance_hours' => null
             ];
 
             if (!empty($matchingCurrentSchool)) {
@@ -109,12 +103,16 @@ class SchoolsRepository implements SchoolsRepositoryInterface
                 }
             }
 
-            $this->addNewSchool($data);
-
+            try {
+                $this->addNewSchool($data);
+            } catch (ModelNotFoundException $exception) {
+                $this->logError(get_class($this), __FUNCTION__, ['data' => $data,
+                    'failure_on' => 'adding new school']);
+                return false;
+            }
         }
 
-        $newSchoolCount = $this->getSchoolCountByYear($newYear);
-        return $legacySchoolCount - $newSchoolCount;
+        return true;
     }
 
 
@@ -131,10 +129,34 @@ class SchoolsRepository implements SchoolsRepositoryInterface
 
     public function getSchoolIdBySchoolNum(int $schoolNum, int $year): int
     {
-        $data = $this->model::where('school', '=', $schoolNum)
+        try {
+            $data = $this->model::where('school', '=', $schoolNum)
                 ->where('school_year', '=', $year)
                 ->first('id')
                 ->toArray();
-        return $data['id'];
+            return $data['id'];
+        }  catch (\Error $exception) {
+            $this->logError(get_class($this), __FUNCTION__, ['year' => $year, 'schoolNum' => $schoolNum]);
+        }
+
+    }
+
+    public function getSchoolBySchoolNum(int $schoolNum, $year): array
+    {
+        try {
+            $data = $this->model::where('school', '=', $schoolNum)
+                ->where('school_year', '=', $year)
+                ->first()
+                ->toArray();
+            return $data;
+        }  catch (\Error $exception) {
+            $this->logError(get_class($this), __FUNCTION__, ['year' => $year, 'schoolNum' => $schoolNum]);
+        }
+    }
+
+    public function getRecordsCount(): int
+    {
+        $records = $this->model::all();
+        $records->count();
     }
 }
